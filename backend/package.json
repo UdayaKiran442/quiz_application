@@ -1,9 +1,11 @@
 {
   "name": "backend",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "dev": "NODE_ENV=development bun run --hot src/index.ts",
+    "prod": "NODE_ENV=production bun run --hot src/index.ts"
   },
   "dependencies": {
+    "dotenv": "^17.2.2",
     "hono": "^4.9.9"
   },
   "devDependencies": {
