@@ -1,6 +1,7 @@
 import { Hono } from "hono";
-import z from "zod";
+import z, { success } from "zod";
 import { createQuiz } from "../../controller/quiz.controller";
+import { CreateQuizError, CreateQuizInDBError } from "../../exceptions/quiz.exceptions";
 
 const quizRouter = new Hono();
 
@@ -18,13 +19,17 @@ quizRouter.post('/create', async (c) => {
             throw validation.error;
         }
         const quiz = await createQuiz(validation.data);
-        console.log("🚀 ~ quiz:", quiz)
-        return c.json({ message: 'Quiz created successfully', quiz }, 200);
+        return c.json({success: true, message: 'Quiz created successfully', quiz }, 200);
     } catch (error) {
         if(error instanceof z.ZodError) {
             const errMessage = JSON.parse(error.message);
 			return c.json({ success: false, error: errMessage[0], message: errMessage[0].message }, 400);
         }
+        
+        if(error instanceof CreateQuizInDBError || error instanceof CreateQuizError){
+            return c.json({ success: false, message: error.message, error: error.cause }, 500);
+        }
+
 		return c.json({ success: false, message: "Something went wrong" }, 500);
     }
 });
