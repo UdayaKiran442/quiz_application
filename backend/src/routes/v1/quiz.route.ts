@@ -36,8 +36,8 @@ quizRouter.post('/create', async (c) => {
 
 quizRouter.get('/', async(c) => {
     try {
-        const quizzes = await getQuizzes();
-        return c.json({ success: true, data: quizzes }, 200);
+        const quiz = await getQuizzes();
+        return c.json({ success: true, quiz }, 200);
     } catch (error) {
         if (error instanceof GetQuizzesError || error instanceof GetQuizzesFromDBError) {
             return c.json({ success: false, message: error.message, error: error.cause }, 500);

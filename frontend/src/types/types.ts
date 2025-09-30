@@ -8,3 +8,19 @@ export interface ICreateQuizResponse {
     message: string,
     error?: string
 }
+
+export interface IFetchAllQuizzesResponse {
+    success: boolean,
+    message: string,
+    error?: string,
+    quiz: IQuiz[]
+}
+
+export interface IQuiz {
+    quizId: string,
+    title: string,
+    noOfQuestions: number,
+    duration: number,
+    createdAt: Date,
+    updatedAt: Date
+}

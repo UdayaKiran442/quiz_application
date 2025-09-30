@@ -1,9 +1,11 @@
-import Quiz from "@/components/Quiz";
+import { fetchAllQuizzesAPI } from "@/actions/quiz.actions";
+import QuizzesPage from "@/components/Quiz";
 
-export default function Home() {
+export default async function Home() {
+  const quizzes = await fetchAllQuizzesAPI();
   return (
     <>
-      <Quiz />
+      <QuizzesPage quizzes={quizzes.quiz} />
     </>
   );
 }
