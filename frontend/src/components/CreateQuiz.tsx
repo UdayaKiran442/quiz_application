@@ -8,6 +8,7 @@ import { Input } from "./ui/Input";
 import { useState } from "react";
 import { ICreateQuizPayload } from "@/types/types";
 import { Label } from "./ui/Label";
+import { createQuizAPI } from "@/actions/quiz.actions";
 
 const CreateQuiz = () => {
   const [createQuiz, setCreateQuiz] = useState<ICreateQuizPayload>({
@@ -18,6 +19,7 @@ const CreateQuiz = () => {
     title?: string;
     duration?: string;
   }>({});
+  const [loading, setLoading] = useState(false);
 
   const createQuizSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -42,7 +44,8 @@ const CreateQuiz = () => {
     });
   }
 
-  function onSubmit() {
+  async function onSubmit() {
+    setLoading(true);
     const validation = createQuizSchema.safeParse(createQuiz);
     if (!validation.success) {
       // Convert Zod errors to a more usable format
@@ -52,7 +55,22 @@ const CreateQuiz = () => {
         newErrors[path] = issue.message;
       });
       setErrors(newErrors);
+      setLoading(false);
     }
+    try {
+      const result = await createQuizAPI(createQuiz);
+      if (result.success) {
+        setCreateQuiz({
+          title: "",
+          duration: 1
+        })
+        setLoading(false)
+      }
+    } catch (error) {
+
+    }
+
+
   }
 
   return (
@@ -99,7 +117,7 @@ const CreateQuiz = () => {
             />
             {errors.duration && <p className="mt-1 text-sm text-red-500">{errors.duration}</p>}
           </div>
-          <Button onClick={onSubmit}>Create Quiz</Button>
+          <Button disabled={loading} onClick={onSubmit}>{loading ? "Creating Quiz...." : "Create Quiz"}</Button>
         </div>
       </div>
     </>

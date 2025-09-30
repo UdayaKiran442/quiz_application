@@ -18,8 +18,8 @@ quizRouter.post('/create', async (c) => {
         if (!validation.success) {
             throw validation.error;
         }
-        const quiz = await createQuiz(validation.data);
-        return c.json({success: true, message: 'Quiz created successfully', quiz }, 200);
+        await createQuiz(validation.data);
+        return c.json({success: true, message: 'Quiz created successfully' }, 200);
     } catch (error) {
         if(error instanceof z.ZodError) {
             const errMessage = JSON.parse(error.message);

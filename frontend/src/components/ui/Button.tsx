@@ -4,11 +4,12 @@ import { cn } from "@/lib/utils";
 
 interface IButtonProps {
   children: React.ReactNode;
+  disabled?: boolean,
   className?: HTMLProps<HTMLElement>["className"];
   onClick?: () => void;
 }
 
-const Button = ({ children, className, onClick }: IButtonProps) => {
+const Button = ({ children, disabled, className, onClick }: IButtonProps) => {
   return (
     <button
       className={cn(
@@ -16,6 +17,7 @@ const Button = ({ children, className, onClick }: IButtonProps) => {
         className
       )}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
