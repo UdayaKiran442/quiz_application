@@ -21,10 +21,24 @@ interface InputProps {
     type: string;
     value?: string | number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    min?: string | number;
+    max?: string | number;
+    step?: string | number;
 }
 
 
-export function Input({ className, placeholder, name, id, type, value, onChange }: InputProps) {
+export function Input({ 
+  className, 
+  placeholder, 
+  name, 
+  id, 
+  type, 
+  value, 
+  onChange, 
+  min, 
+  max, 
+  step 
+}: InputProps) {
     // cn() merges the default classes with the passed-in className.
     // If className contains a conflicting class (e.g., text-4xl),
     // it will correctly override the default (text-7xl).
@@ -38,6 +52,9 @@ export function Input({ className, placeholder, name, id, type, value, onChange 
                 id={id}
                 value={value}
                 onChange={onChange}
+                min={min}
+                max={max}
+                step={step}
             />
         </>
     )

@@ -14,26 +14,44 @@ const CreateQuiz = () => {
     title: "",
     duration: 1,
   });
+  const [errors, setErrors] = useState<{
+    title?: string;
+    duration?: string;
+  }>({});
 
   const createQuizSchema = z.object({
-    title: z.string(),
-    duration: z.number().min(1)
-  })
+    title: z.string().min(1, "Title is required"),
+    duration: z.number().min(1, "Duration must be at least 1 minute")
+  });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name } = e.target;
+
+    // Clear error for the current field when user types
+    if (errors[name as keyof typeof errors]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name as keyof typeof errors];
+        return newErrors;
+      });
+    }
+
     setCreateQuiz({
       ...createQuiz,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   }
 
   function onSubmit() {
-    const result = createQuizSchema.safeParse(createQuiz)
-    if (result.success && createQuiz.title !== "") {
-      console.log(result.data)
-    }
-    else {
-      console.log("ewek")
+    const validation = createQuizSchema.safeParse(createQuiz);
+    if (!validation.success) {
+      // Convert Zod errors to a more usable format
+      const newErrors: Record<string, string> = {};
+      validation.error.issues.forEach(issue => {
+        const path = issue.path[0] as string;
+        newErrors[path] = issue.message;
+      });
+      setErrors(newErrors);
     }
   }
 
@@ -62,7 +80,9 @@ const CreateQuiz = () => {
               placeholder="Enter title for the quiz"
               value={createQuiz?.title}
               onChange={handleChange}
+              className={errors.title ? "border-red-500" : ""}
             />
+            {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title}</p>}
           </div>
           <div>
             <Label id="duration" label="Duration(in minutes)" />
@@ -71,9 +91,13 @@ const CreateQuiz = () => {
               name="duration"
               id="duration"
               placeholder="Enter duration for the quiz in minutes"
-              value={createQuiz?.duration}
+              value={createQuiz.duration}
               onChange={handleChange}
+              min="1"
+              max="240"
+              className={errors.duration ? "border-red-500" : ""}
             />
+            {errors.duration && <p className="mt-1 text-sm text-red-500">{errors.duration}</p>}
           </div>
           <Button onClick={onSubmit}>Create Quiz</Button>
         </div>
