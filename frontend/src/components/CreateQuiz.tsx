@@ -9,6 +9,7 @@ import { useState } from "react";
 import { ICreateQuizPayload } from "@/types/types";
 import { Label } from "./ui/Label";
 import { createQuizAPI } from "@/actions/quiz.actions";
+import Link from "next/link";
 
 const CreateQuiz = () => {
   const [createQuiz, setCreateQuiz] = useState<ICreateQuizPayload>({
@@ -76,10 +77,12 @@ const CreateQuiz = () => {
   return (
     <>
       <div className="flex justify-start p-8">
-        <Button className="flex justify-center items-center">
-          <ArrowLeft className="mr-2" />
-          Go Back to quizzes
-        </Button>
+        <Link href={"/"} >
+          <Button className="flex justify-center items-center">
+            <ArrowLeft className="mr-2" />
+            Go Back to quizzes
+          </Button>
+        </Link>
       </div>
       <div className="max-w-md mx-auto mt-10 p-8 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
         <div className="text-center">
