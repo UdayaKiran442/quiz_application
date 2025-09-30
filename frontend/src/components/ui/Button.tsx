@@ -15,6 +15,7 @@ const Button = ({ children, className, onClick }: IButtonProps) => {
         "!bg-red-600 hover:!bg-red-700 transition duration-300 py-1 px-4 rounded-lg font-semibold",
         className
       )}
+      onClick={onClick}
     >
       {children}
     </button>
