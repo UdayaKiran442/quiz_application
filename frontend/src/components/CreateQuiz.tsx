@@ -1,3 +1,5 @@
+import { ArrowLeft } from "lucide-react";
+
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
 
@@ -5,7 +7,10 @@ const CreateQuiz = () => {
   return (
     <>
       <div className="flex justify-start p-8">
-        <Button>Go back to all quizzes</Button>
+        <Button className="flex justify-center items-center">
+          <ArrowLeft className="mr-2" />
+          Go Back to quizzes
+        </Button>
       </div>
       <div className="max-w-md mx-auto mt-10 p-8 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
         <div className="text-center mb-8">
