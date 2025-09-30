@@ -11,4 +11,7 @@ app.get('/', (c) => {
 
 app.route('/v1', v1Router)
 
-export default app
+export default {
+  port: 8080,
+  fetch: app.fetch,
+}
