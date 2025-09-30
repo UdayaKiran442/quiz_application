@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import z, { success } from "zod";
-import { createQuiz } from "../../controller/quiz.controller";
-import { CreateQuizError, CreateQuizInDBError } from "../../exceptions/quiz.exceptions";
+import { createQuiz, getQuizzes } from "../../controller/quiz.controller";
+import { CreateQuizError, CreateQuizInDBError, GetQuizzesError, GetQuizzesFromDBError } from "../../exceptions/quiz.exceptions";
 
 const quizRouter = new Hono();
 
@@ -33,5 +33,17 @@ quizRouter.post('/create', async (c) => {
 		return c.json({ success: false, message: "Something went wrong" }, 500);
     }
 });
+
+quizRouter.get('/', async(c) => {
+    try {
+        const quizzes = await getQuizzes();
+        return c.json({ success: true, data: quizzes }, 200);
+    } catch (error) {
+        if (error instanceof GetQuizzesError || error instanceof GetQuizzesFromDBError) {
+            return c.json({ success: false, message: error.message, error: error.cause }, 500);
+        }
+        return c.json({ success: false, message: "Something went wrong" }, 500);
+    }
+})
 
 export default quizRouter;

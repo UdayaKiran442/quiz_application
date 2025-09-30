@@ -1,4 +1,4 @@
-import { CreateQuizInDBError } from "../exceptions/quiz.exceptions";
+import { CreateQuizInDBError, GetQuizzesFromDBError } from "../exceptions/quiz.exceptions";
 import { ICreateQuizSchema } from "../routes/v1/quiz.route";
 import { generateNanoId } from "../utils/nanoId.utils";
 import db from "./db";
@@ -18,5 +18,13 @@ export async function createQuizInDB(payload: ICreateQuizSchema){
         return insertPayload;
     } catch (error) {
         throw new CreateQuizInDBError("Failed to create quiz in DB", { cause: (error as Error).message });
+    }
+}
+
+export async function getQuizzesFromDB(){
+    try {
+        return await db.select().from(quiz);
+    } catch (error) {
+        throw new GetQuizzesFromDBError("Failed to get quizzes from DB", { cause: (error as Error).message });
     }
 }
