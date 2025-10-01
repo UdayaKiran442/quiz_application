@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import z from "zod";
-import { AddQuestionsToQuizError, AddQuestionsToQuizInDBError } from "../../exceptions/questions.exceptions";
-import { addQuestionsToQuiz } from "../../controller/questions.controller";
+import { AddQuestionsToQuizError, AddQuestionsToQuizInDBError, GetQuestionByQuizIdError, GetQuestionByQuizIdFromDBError } from "../../exceptions/questions.exceptions";
+import { addQuestionsToQuiz, getQuestionsByQuizId } from "../../controller/questions.controller";
 
 const questionsRouter = new Hono();
 
@@ -34,5 +34,31 @@ questionsRouter.post('/add', async (c) => {
         return c.json({ success: false, message: "Something went wrong" }, 500);
     }
 });
+
+const FetchQuestionsByQuizIdSchema = z.object({
+    quizId: z.string()
+})
+
+export type IFetchQuestionsByQuizIdSchema = z.infer<typeof FetchQuestionsByQuizIdSchema>;
+
+questionsRouter.post('/fetch', async(c) => {
+    try {
+        const validation = FetchQuestionsByQuizIdSchema.safeParse(await c.req.json());
+        if (!validation.success) {
+            throw validation.error;
+        }
+        const questions = await getQuestionsByQuizId(validation.data.quizId);
+        return c.json({ success: true, questions }, 200);
+    } catch (error) {
+        if(error instanceof z.ZodError) {
+            const errMessage = JSON.parse(error.message);
+			return c.json({ success: false, error: errMessage[0], message: errMessage[0].message }, 400);
+        }
+        if (error instanceof GetQuestionByQuizIdError || error instanceof GetQuestionByQuizIdFromDBError) {
+            return c.json({ success: false, message: error.message, error: error.cause }, 500);
+        }
+        return c.json({ success: false, message: "Something went wrong" }, 500);
+    }
+})
 
 export default questionsRouter;

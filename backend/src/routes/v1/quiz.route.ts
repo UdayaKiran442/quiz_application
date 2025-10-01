@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import z, { success } from "zod";
+import z from "zod";
 import { createQuiz, getQuizzes } from "../../controller/quiz.controller";
 import { CreateQuizError, CreateQuizInDBError, GetQuizzesError, GetQuizzesFromDBError } from "../../exceptions/quiz.exceptions";
 

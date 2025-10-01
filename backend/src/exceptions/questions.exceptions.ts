@@ -17,3 +17,23 @@ export class AddQuestionsToQuizError extends Error {
 		Error.captureStackTrace(this, this.constructor);
 	}
 }
+
+export class GetQuestionByQuizIdFromDBError extends Error {
+	public cause?: unknown;
+	constructor(message: string, options?: { cause?: unknown }) {
+		super(message);
+		this.name = "GetQuestionByQuizIdFromDBError";
+		if (options?.cause) this.cause = options.cause;
+		Error.captureStackTrace(this, this.constructor);
+	}
+}
+
+export class GetQuestionByQuizIdError extends Error {
+	public cause?: unknown;
+	constructor(message: string, options?: { cause?: unknown }) {
+		super(message);
+		this.name = "GetQuestionByQuizIdError";
+		if (options?.cause) this.cause = options.cause;
+		Error.captureStackTrace(this, this.constructor);
+	}
+}
