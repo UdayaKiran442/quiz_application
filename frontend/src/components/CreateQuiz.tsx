@@ -20,6 +20,11 @@ const CreateQuiz = () => {
     title?: string;
     duration?: string;
   }>({});
+
+  const [questionsError, setQuestionsError] = useState<
+    { questionText?: string; correctOption?: string; options?: string }
+  >({});
+
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<{
     questionText: string,
@@ -31,6 +36,12 @@ const CreateQuiz = () => {
     title: z.string().min(1, "Title is required"),
     duration: z.number().min(1, "Duration must be at least 1 minute")
   });
+
+  const questionsSchema = z.array(z.object({
+    questionText: z.string().min(5, "Question text must be minimum of 5 characters"),
+    options: z.record(z.string().min(1, "Option key must be minimum of 1 character"), z.string().min(1, "Option value must be minimum of 1 character")),
+    correctOption: z.string().min(1, "Please choose correct option"),
+  }));
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name } = e.target;
@@ -51,18 +62,44 @@ const CreateQuiz = () => {
   }
 
   async function onSubmit() {
+    // console.log(questions);
     setLoading(true);
-    const validation = createQuizSchema.safeParse(createQuiz);
-    if (!validation.success) {
+
+    const questionsValidation = questionsSchema.safeParse(questions)
+
+
+    if (!questionsValidation.success) {
+      const newErrors: { questionText?: string; correctOption?: string; options?: string } = {};
+      questionsValidation.error.issues.forEach((issue) => {
+        if (issue.path[1] === "questionText") {
+          newErrors['questionText'] = issue.message
+        }
+        if (issue.path[1] === 'options') {
+          newErrors['options'] = issue.message
+        }
+        if (issue.path[1] === 'correctOption') {
+          newErrors['correctOption'] = issue.message
+        }
+      });
+      setQuestionsError(newErrors);
+      setLoading(false);
+      return;
+    }
+
+
+    const quizValidation = createQuizSchema.safeParse(createQuiz);
+    if (!quizValidation.success) {
       // Convert Zod errors to a more usable format
       const newErrors: Record<string, string> = {};
-      validation.error.issues.forEach(issue => {
+      quizValidation.error.issues.forEach(issue => {
         const path = issue.path[0] as string;
         newErrors[path] = issue.message;
       });
       setErrors(newErrors);
       setLoading(false);
+      return
     }
+
     try {
       const result = await createQuizAPI(createQuiz);
       if (result.success) {
@@ -144,6 +181,7 @@ const CreateQuiz = () => {
                     setQuestions(updated);
                   }}
                 />
+                {questionsError.questionText && <p className="mt-1 text-sm text-red-500" >{questionsError.questionText}</p>}
 
                 {/* Options */}
                 <div className="mt-3">
@@ -201,3 +239,29 @@ const CreateQuiz = () => {
 };
 
 export default CreateQuiz;
+
+/**
+{
+"origin": "string",
+"code": "too_small",
+"minimum": 5,
+"inclusive": true,
+"path": [
+  0,
+  "questionText"
+],
+"message": "Qeustion text must be minimum of 5 characters"
+},
+{
+"origin": "string",
+"code": "too_small",
+"minimum": 1,
+"inclusive": true,
+"path": [
+  0,
+  "options",
+  "A"
+],
+"message": "Option value must be minimum of 1 character"
+},
+ */
