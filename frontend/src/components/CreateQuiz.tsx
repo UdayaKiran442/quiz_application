@@ -13,6 +13,7 @@ import { createQuizAPI } from "@/actions/quiz.actions";
 import ErrorMessage from "./ErrorMessage";
 import Questions from "./Questions";
 import { addQuestionsToQuizAPI } from "@/actions/questions.actions";
+import { toast } from "react-toastify";
 
 const CreateQuiz = () => {
   const [createQuiz, setCreateQuiz] = useState<ICreateQuizPayload>({
@@ -80,10 +81,14 @@ const CreateQuiz = () => {
           ...q,
           quizId: result.quizId
         })) as IAddQuestionsToQuizPayload[]
-        console.log(payload)
 
         const addQuestionsToQuiz = await addQuestionsToQuizAPI(payload)
-        console.log(addQuestionsToQuiz);
+        if (addQuestionsToQuiz.success) {
+          setQuestions([]);
+          toast.success(addQuestionsToQuiz.message, {
+            closeButton: true,
+          })
+        }
         setLoading(false)
       }
     } catch (error) {

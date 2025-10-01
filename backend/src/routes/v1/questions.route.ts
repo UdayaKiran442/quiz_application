@@ -17,7 +17,6 @@ export type IAddQuestionsToQuizSchema = z.infer<typeof AddQuestionsToQuizSchema>
 questionsRouter.post('/add', async (c) => {
     try {
         const validation = AddQuestionsToQuizSchema.safeParse(await c.req.json());
-        console.log("🚀 ~ validation.data:", validation.data)
         if (!validation.success) {
             throw validation.error;
         }
