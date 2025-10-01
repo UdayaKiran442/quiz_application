@@ -1,15 +1,17 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { z } from 'zod'
 
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useState } from "react";
-import { ICreateQuizPayload } from "@/types/types";
+import { ICreateQuizPayload, IQuestion } from "@/types/types";
 import { Label } from "./ui/Label";
 import { createQuizAPI } from "@/actions/quiz.actions";
-import Link from "next/link";
+import ErrorMessage from "./ErrorMessage";
+import Questions from "./Questions";
 
 const CreateQuiz = () => {
   const [createQuiz, setCreateQuiz] = useState<ICreateQuizPayload>({
@@ -21,27 +23,13 @@ const CreateQuiz = () => {
     duration?: string;
   }>({});
 
-  const [questionsError, setQuestionsError] = useState<
-    { questionText?: string; correctOption?: string; options?: string }
-  >({});
-
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<{
-    questionText: string,
-    options: Record<string, string>,
-    correctOption: string
-  }[]>([]);
+  const [questions, setQuestions] = useState<IQuestion[]>([]);
 
   const createQuizSchema = z.object({
     title: z.string().min(1, "Title is required"),
     duration: z.number().min(1, "Duration must be at least 1 minute")
   });
-
-  const questionsSchema = z.array(z.object({
-    questionText: z.string().min(5, "Question text must be minimum of 5 characters"),
-    options: z.record(z.string().min(1, "Option key must be minimum of 1 character"), z.string().min(1, "Option value must be minimum of 1 character")),
-    correctOption: z.string().min(1, "Please choose correct option"),
-  }));
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name } = e.target;
@@ -62,30 +50,7 @@ const CreateQuiz = () => {
   }
 
   async function onSubmit() {
-    // console.log(questions);
     setLoading(true);
-
-    const questionsValidation = questionsSchema.safeParse(questions)
-
-
-    if (!questionsValidation.success) {
-      const newErrors: { questionText?: string; correctOption?: string; options?: string } = {};
-      questionsValidation.error.issues.forEach((issue) => {
-        if (issue.path[1] === "questionText") {
-          newErrors['questionText'] = issue.message
-        }
-        if (issue.path[1] === 'options') {
-          newErrors['options'] = issue.message
-        }
-        if (issue.path[1] === 'correctOption') {
-          newErrors['correctOption'] = issue.message
-        }
-      });
-      setQuestionsError(newErrors);
-      setLoading(false);
-      return;
-    }
-
 
     const quizValidation = createQuizSchema.safeParse(createQuiz);
     if (!quizValidation.success) {
@@ -145,7 +110,7 @@ const CreateQuiz = () => {
               onChange={handleChange}
               className={errors.title ? "border-red-500" : ""}
             />
-            {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title}</p>}
+            {errors.title && <ErrorMessage message={errors.title} />}
           </div>
           <div>
             <Label id="duration" label="Duration(in minutes)" />
@@ -160,62 +125,14 @@ const CreateQuiz = () => {
               max="240"
               className={errors.duration ? "border-red-500" : ""}
             />
-            {errors.duration && <p className="mt-1 text-sm text-red-500">{errors.duration}</p>}
+            {errors.duration && <ErrorMessage message={errors.duration} />}
           </div>
           {/* Questions */}
           <div>
             <h4 className="text-lg font-semibold mb-2">Add Questions</h4>
 
             {questions && questions.map((q, index) => (
-              <div key={index} className="border border-gray-600 rounded-lg p-4 mb-4">
-                <Label id={`question-${index}`} label={`Question ${index + 1}`} />
-                <Input
-                  type="text"
-                  id={`question-${index}`}
-                  name={`question-${index}`}
-                  placeholder="Enter question text"
-                  value={q.questionText}
-                  onChange={(e) => {
-                    const updated = [...questions];
-                    updated[index].questionText = e.target.value;
-                    setQuestions(updated);
-                  }}
-                />
-                {questionsError.questionText && <p className="mt-1 text-sm text-red-500" >{questionsError.questionText}</p>}
-
-                {/* Options */}
-                <div className="mt-3">
-                  <h5 className="font-medium text-sm">Options</h5>
-                  {Object.entries(q.options).map(([key, value]) => (
-                    <div key={key} className="flex items-center gap-2 mt-2">
-                      <Label id={`${index}-opt-${key}`} label={key} />
-                      <Input
-                        type="text"
-                        id={`${index}-opt-${key}`}
-                        name={`${index}-opt-${key}`}
-                        placeholder={`Enter option ${key}`}
-                        value={value}
-                        onChange={(e) => {
-                          const updated = [...questions];
-                          updated[index].options[key] = e.target.value;
-                          setQuestions(updated);
-                        }}
-                      />
-                      <input
-                        type="radio"
-                        name={`correct-${index}`}
-                        checked={q.correctOption === key}
-                        onChange={() => {
-                          const updated = [...questions];
-                          updated[index].correctOption = key;
-                          setQuestions(updated);
-                        }}
-                      />
-                      <span className="text-sm text-gray-300">Correct</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <Questions index={index} q={q} questions={questions} setQuestions={setQuestions} key={index} />
             ))}
 
             <Button
@@ -239,29 +156,3 @@ const CreateQuiz = () => {
 };
 
 export default CreateQuiz;
-
-/**
-{
-"origin": "string",
-"code": "too_small",
-"minimum": 5,
-"inclusive": true,
-"path": [
-  0,
-  "questionText"
-],
-"message": "Qeustion text must be minimum of 5 characters"
-},
-{
-"origin": "string",
-"code": "too_small",
-"minimum": 1,
-"inclusive": true,
-"path": [
-  0,
-  "options",
-  "A"
-],
-"message": "Option value must be minimum of 1 character"
-},
- */

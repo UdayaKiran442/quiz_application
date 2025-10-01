@@ -24,3 +24,9 @@ export interface IQuiz {
     createdAt: Date,
     updatedAt: Date
 }
+
+export interface IQuestion {
+    questionText: string,
+    options: Record<string, string>,
+    correctOption: string
+}
