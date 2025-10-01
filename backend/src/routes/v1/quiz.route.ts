@@ -8,6 +8,7 @@ const quizRouter = new Hono();
 const CreateQuizSchema = z.object({
     title: z.string().min(1, "Title is required"),
     duration: z.number().min(1, "Duration must be at least 1 minute"),
+    noOfQuestions: z.number().min(1, "Number of questions must be at least 1"),
 })
 
 export type ICreateQuizSchema = z.infer<typeof CreateQuizSchema>;
@@ -18,8 +19,9 @@ quizRouter.post('/create', async (c) => {
         if (!validation.success) {
             throw validation.error;
         }
-        await createQuiz(validation.data);
-        return c.json({success: true, message: 'Quiz created successfully' }, 200);
+        const quizId = await createQuiz(validation.data);
+        console.log("🚀 ~ quizId:", quizId)
+        return c.json({success: true, message: 'Quiz created successfully', quizId }, 200);
     } catch (error) {
         if(error instanceof z.ZodError) {
             const errMessage = JSON.parse(error.message);

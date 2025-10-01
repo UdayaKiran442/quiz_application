@@ -15,6 +15,13 @@
       "when": 1759161136750,
       "tag": "0001_lying_tag",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1759301978544,
+      "tag": "0002_hot_steel_serpent",
+      "breakpoints": true
     }
   ]
 }

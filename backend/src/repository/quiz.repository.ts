@@ -10,12 +10,13 @@ export async function createQuizInDB(payload: ICreateQuizSchema){
             quizId: `quiz_${generateNanoId()}`,
             title: payload.title,
             duration: payload.duration,
+            noOfQuestions: payload.noOfQuestions,
             createdAt: new Date(),
             updatedAt: new Date(),
         }
 
         await db.insert(quiz).values(insertPayload);
-        return insertPayload;
+        return insertPayload.quizId;
     } catch (error) {
         throw new CreateQuizInDBError("Failed to create quiz in DB", { cause: (error as Error).message });
     }

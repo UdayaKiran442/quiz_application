@@ -7,16 +7,18 @@ import { z } from 'zod'
 import Button from "./ui/Button";
 import { Input } from "./ui/Input";
 import { useState } from "react";
-import { ICreateQuizPayload, IQuestion } from "@/types/types";
+import { IAddQuestionsToQuizPayload, ICreateQuizPayload, IQuestion } from "@/types/types";
 import { Label } from "./ui/Label";
 import { createQuizAPI } from "@/actions/quiz.actions";
 import ErrorMessage from "./ErrorMessage";
 import Questions from "./Questions";
+import { addQuestionsToQuizAPI } from "@/actions/questions.actions";
 
 const CreateQuiz = () => {
   const [createQuiz, setCreateQuiz] = useState<ICreateQuizPayload>({
     title: "",
     duration: 1,
+    noOfQuestions: 0
   });
   const [errors, setErrors] = useState<{
     title?: string;
@@ -66,16 +68,26 @@ const CreateQuiz = () => {
     }
 
     try {
-      const result = await createQuizAPI(createQuiz);
+      const result = await createQuizAPI({ ...createQuiz, noOfQuestions: questions.length });
       if (result.success) {
         setCreateQuiz({
           title: "",
-          duration: 1
+          duration: 1,
+          noOfQuestions: questions.length
         })
+
+        const payload = questions.map(q => ({
+          ...q,
+          quizId: result.quizId
+        })) as IAddQuestionsToQuizPayload[]
+        console.log(payload)
+
+        const addQuestionsToQuiz = await addQuestionsToQuizAPI(payload)
+        console.log(addQuestionsToQuiz);
         setLoading(false)
       }
     } catch (error) {
-
+      setLoading(false)
     }
 
 

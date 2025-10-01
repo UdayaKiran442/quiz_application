@@ -1,11 +1,13 @@
 export interface ICreateQuizPayload {
     title: string;
     duration: number;
+    noOfQuestions: number;
 }
 
 export interface ICreateQuizResponse {
     success: boolean,
     message: string,
+    quizId: string,
     error?: string
 }
 
@@ -29,4 +31,14 @@ export interface IQuestion {
     questionText: string,
     options: Record<string, string>,
     correctOption: string
+}
+
+export interface IAddQuestionsToQuizPayload extends IQuestion {
+    quizId: string,
+}
+
+export interface IAddQuestionsToQuizResponse {
+    success: boolean,
+    message: string,
+    error?: string,
 }
