@@ -48,13 +48,13 @@ const CreateQuiz = () => {
 
     setCreateQuiz({
       ...createQuiz,
-      [e.target.name]: e.target.value
+      [e.target.name]: name === "duration" ? Number(e.target.value) : e.target.value
     });
   }
 
   async function onSubmit() {
     setLoading(true);
-
+    console.log(createQuiz)
     const quizValidation = createQuizSchema.safeParse(createQuiz);
     if (!quizValidation.success) {
       // Convert Zod errors to a more usable format
@@ -124,7 +124,7 @@ const CreateQuiz = () => {
               id="title"
               placeholder="Enter title for the quiz"
               value={createQuiz?.title}
-              onChange={handleChange}
+              onChange={(e) => handleChange(e)}
               className={errors.title ? "border-red-500" : ""}
             />
             {errors.title && <ErrorMessage message={errors.title} />}
@@ -137,9 +137,7 @@ const CreateQuiz = () => {
               id="duration"
               placeholder="Enter duration for the quiz in minutes"
               value={createQuiz.duration}
-              onChange={handleChange}
-              min="1"
-              max="240"
+              onChange={(e) => handleChange(e)}
               className={errors.duration ? "border-red-500" : ""}
             />
             {errors.duration && <ErrorMessage message={errors.duration} />}
