@@ -42,3 +42,17 @@ export interface IAddQuestionsToQuizResponse {
     message: string,
     error?: string,
 }
+
+export interface IQuestion {
+    quizId: string,
+    title: string,
+    duration: string,
+    questionId: string,
+    questionText: string,
+    options: Record<string, string>,
+}
+
+export interface IFetchQuestionsByQuizIdResponse {
+    success: boolean,
+    questions: IQuestion[]
+}
