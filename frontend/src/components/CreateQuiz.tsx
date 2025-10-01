@@ -54,7 +54,6 @@ const CreateQuiz = () => {
 
   async function onSubmit() {
     setLoading(true);
-    console.log(createQuiz)
     const quizValidation = createQuizSchema.safeParse(createQuiz);
     if (!quizValidation.success) {
       // Convert Zod errors to a more usable format
