@@ -1,11 +1,34 @@
-To install dependencies:
+# To run backend project
+
+## Clone github repository
+```sh
+git clone https://github.com/UdayaKiran442/quiz_application
+```
+
+## Install dependencies
+```sh
+cd backend
+```
+
 ```sh
 bun install
 ```
 
-To run:
+## Run server
+
+### For development environment
 ```sh
 bun run dev
 ```
 
-open http://localhost:3000
+### For production environment
+```sh
+bun run prod
+```
+
+-------------------------------------
+
+# Migration Script for running drizzle schemas
+```sh
+npx drizzle-kit generate
+```
