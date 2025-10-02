@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description drizzle orm schemas for quiz and questions tables
+ */
+
 import { integer, pgTable, timestamp, varchar, json, index } from "drizzle-orm/pg-core";
 
 export const quiz = pgTable("quiz", {

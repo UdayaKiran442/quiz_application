@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description database operations for questions table
+ */
+
 import { eq } from "drizzle-orm";
 import { AddQuestionsToQuizInDBError, GetQuestionByQuizIdFromDBError } from "../exceptions/questions.exceptions";
 import { IAddQuestionsToQuizSchema } from "../routes/v1/questions.route";

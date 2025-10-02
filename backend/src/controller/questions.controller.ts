@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description Controller for questions route
+ */
+
 import { AddQuestionsToQuizError, AddQuestionsToQuizInDBError, GetQuestionByQuizIdError } from "../exceptions/questions.exceptions";
 import { addQuestionsToQuizInDB, getQuestionsByQuizIdFromDB } from "../repository/questions.repository";
 import { IAddQuestionsToQuizSchema } from "../routes/v1/questions.route";

@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description router for questions
+ */
+
 import { Hono } from "hono";
 import z from "zod";
 import { AddQuestionsToQuizError, AddQuestionsToQuizInDBError, GetQuestionByQuizIdError, GetQuestionByQuizIdFromDBError } from "../../exceptions/questions.exceptions";
@@ -5,6 +10,7 @@ import { addQuestionsToQuiz, getQuestionsByQuizId } from "../../controller/quest
 
 const questionsRouter = new Hono();
 
+// Schema to add questions to quiz
 const AddQuestionsToQuizSchema = z.array(z.object({
     quizId: z.string(),
     questionText: z.string().min(5, "Question text must be minimum of 5 characters"),
@@ -14,8 +20,10 @@ const AddQuestionsToQuizSchema = z.array(z.object({
 
 export type IAddQuestionsToQuizSchema = z.infer<typeof AddQuestionsToQuizSchema>;
 
+// route to add questions to quiz
 questionsRouter.post('/add', async (c) => {
     try {
+        // zod validation of payload
         const validation = AddQuestionsToQuizSchema.safeParse(await c.req.json());
         if (!validation.success) {
             throw validation.error;

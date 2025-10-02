@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description Controller for quiz route
+ */
+
 import { CreateQuizError, CreateQuizInDBError, GetQuizzesError, GetQuizzesFromDBError } from "../exceptions/quiz.exceptions";
 import { createQuizInDB, getQuizzesFromDB } from "../repository/quiz.repository";
 import { ICreateQuizSchema } from "../routes/v1/quiz.route";

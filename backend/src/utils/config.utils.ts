@@ -1,6 +1,11 @@
-
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @returns Object of active secret variables
+ * @description Configuration file to fetch active secret values based on environment
+ */
 import * as dotenv from "dotenv";
 
+// fetch current environment from package.json
 const environment = process.env.NODE_ENV;
 
 if (environment === "development") {

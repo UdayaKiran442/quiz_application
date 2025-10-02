@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description Exceptions classes of various functions
+ */
+
 export class AddQuestionsToQuizInDBError extends Error {
 	public cause?: unknown;
 	constructor(message: string, options?: { cause?: unknown }) {

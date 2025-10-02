@@ -1,3 +1,8 @@
+/**
+ * @author Udaya Kiran Gonuguntla
+ * @description database operations for quiz table
+ */
+
 import { CreateQuizInDBError, GetQuizzesFromDBError } from "../exceptions/quiz.exceptions";
 import { ICreateQuizSchema } from "../routes/v1/quiz.route";
 import { generateNanoId } from "../utils/nanoId.utils";
