@@ -1,7 +1,6 @@
 "use client"
 
-import { IQuestion } from "@/types/types"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Button from "./ui/Button"
 
 interface IQuestionsPageProps {
@@ -16,23 +15,8 @@ interface IQuestionsPageProps {
 }
 
 export default function QuestionsPage({ questions, length }: IQuestionsPageProps) {
-    const [index, setIndex] = useState<number>(0)
-    const [currentQuestion, setCurrentQuestion] = useState<{
-        questionId: string,
-        questionText: string,
-        options: Record<string, string>
-    }>({
-        questionId: "",
-        questionText: "",
-        options: {}
-    })
-    useEffect(() => {
-        setCurrentQuestion({
-            questionId: questions[index].questionId,
-            questionText: questions[index].questionText,
-            options: questions[index].options
-        })
-    }, [index])
+    const [currentIndex, setCurrentIndex] = useState<number>(0)
+    const currentQuestion = questions[currentIndex]
     return (
         <div className="max-w-2xl mx-auto p-6 ">
             <div>
@@ -40,7 +24,7 @@ export default function QuestionsPage({ questions, length }: IQuestionsPageProps
             </div>
             {/* question */}
             <div className="flex gap-1">
-                <p>{index + 1}.</p>
+                <p>{currentIndex + 1}.</p>
                 <p>{currentQuestion.questionText}</p>
             </div>
             {/* options */}
@@ -64,13 +48,13 @@ export default function QuestionsPage({ questions, length }: IQuestionsPageProps
             </div>
             {/* buttons */}
             <div className="flex justify-around mt-3">
-                {index > 0 && (
-                    <Button onClick={() => setIndex(index - 1)} >Previous</Button>
+                {currentIndex > 0 && (
+                    <Button onClick={() => setCurrentIndex(currentIndex - 1)}>Previous</Button>
                 )}
-                {index + 1 === length ? (
+                {currentIndex + 1 === length ? (
                     <Button>Submit</Button>
                 ) : (
-                    <Button onClick={() => setIndex(index + 1)}>Next</Button>
+                    <Button onClick={() => setCurrentIndex(currentIndex + 1)}>Next</Button>
                 )}
             </div>
         </div>
