@@ -56,3 +56,10 @@ export interface IFetchQuestionsByQuizIdResponse {
     success: boolean,
     questions: IQuestion[]
 }
+
+export interface IAddAttemptResponse {
+    success: boolean,
+    quizId: string,
+    message: string,
+    error?: string
+}
