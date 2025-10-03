@@ -10,6 +10,7 @@ const submitRoute = new Hono();
 const SubmitQuestionSchema = z.object({
     quizId: z.string(),
     questionId: z.string(),
+    attemptId: z.string(),
     option: z.string().min(1).max(1),
 })
 

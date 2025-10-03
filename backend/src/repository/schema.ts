@@ -26,10 +26,19 @@ export const questions = pgTable("questions", {
     quizIdIndex: index("quiz_id_index").on(questions.quizId)
 }))
 
+export const attempts = pgTable("attempts", {
+    attemptId: varchar("attempt_id").primaryKey(),
+    quizId: varchar("quiz_id").notNull(),
+    status: varchar("status").notNull().default("IN_PROGRESS"), // in progress, completed
+    startedAt: timestamp("started_at").notNull(),
+    endedAt: timestamp("ended_at"),
+})
+
 export const submissions = pgTable("submissions", {
     submissionId: varchar("submissionId").primaryKey(),
     quizId: varchar("quizId").notNull(),
     questionId: varchar("questionId").notNull(),
+    attemptId: varchar("attemptId").notNull(),
     option: varchar("option").notNull(),
     isCorrect: boolean("isCorrect").notNull(),
     createdAt: timestamp("created_at").notNull(),
