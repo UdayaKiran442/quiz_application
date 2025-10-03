@@ -59,7 +59,7 @@ export interface IFetchQuestionsByQuizIdResponse {
 
 export interface IAddAttemptResponse {
     success: boolean,
-    quizId: string,
+    attemptId: string,
     message: string,
     error?: string
 }

@@ -1,24 +1,31 @@
 "use client"
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import Button from "./ui/Button";
 import { IQuiz } from "@/types/types";
 import QuizCard from "./QuizCard";
 import { addAttemptAPI } from "@/actions/attempts.actions";
+import { useState } from "react";
 
 interface IQuizzesPage {
   quizzes: IQuiz[]
 }
 
 export default function QuizzesPage({ quizzes }: IQuizzesPage) {
+  const [loading, setLoading] = useState(false);
+
+  const redirect = useRouter();
 
   async function createAttempt(quizId: string) {
     try {
-      const newAttemptId = await addAttemptAPI(quizId)
-      if (newAttemptId.success) {
-        // store attemptId in redux
+      setLoading(true);
+      const newAttempt = await addAttemptAPI(quizId);
+      if (newAttempt.success) {
+        setLoading(false);
         // redirect to quiz exam page
+        redirect.push(`/quiz/${quizId}/${newAttempt.attemptId}`);
       }
     } catch (error) {
 
@@ -33,7 +40,7 @@ export default function QuizzesPage({ quizzes }: IQuizzesPage) {
         </Link>
       </div>
       {quizzes.map((quiz) => (
-        <QuizCard onClick={() => createAttempt(quiz.quizId)} quiz={quiz} key={quiz.quizId} />
+        <QuizCard loading={loading} onClick={() => createAttempt(quiz.quizId)} quiz={quiz} key={quiz.quizId} />
       ))}
     </div>
   );

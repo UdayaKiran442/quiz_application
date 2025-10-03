@@ -4,14 +4,14 @@ import { ArrowRight, Clock } from "lucide-react"
 
 import { IQuiz } from "@/types/types"
 import Button from "./ui/Button"
-import Link from "next/link"
 
 interface IQuizCard {
     quiz: IQuiz,
+    loading: boolean,
     onClick: () => void
 }
 
-export default function QuizCard({ quiz, onClick }: IQuizCard) {
+export default function QuizCard({ quiz, loading, onClick }: IQuizCard) {
     return (
         <div key={quiz.quizId} className="mt-5 mx-10 bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700 ">
             <div className="p-5 flex justify-between items-center">
@@ -22,12 +22,10 @@ export default function QuizCard({ quiz, onClick }: IQuizCard) {
                         Duration: {quiz.duration} min
                     </p>
                 </div>
-                <Link href={`/quiz/${quiz.quizId}`}>
-                    <Button onClick={onClick} className="flex items-center justify-center gap-1">
-                        Take Quiz
-                        <ArrowRight />
-                    </Button>
-                </Link>
+                <Button disabled={loading}  onClick={onClick} className="flex items-center justify-center gap-1">
+                    Take Quiz
+                    <ArrowRight />
+                </Button>
             </div>
         </div>
     )
