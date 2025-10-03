@@ -42,3 +42,13 @@ export class GetQuestionByQuizIdError extends Error {
 		Error.captureStackTrace(this, this.constructor);
 	}
 }
+
+export class FetchCorrectOptionByQuestionIdError extends Error {
+	public cause?: unknown;
+	constructor(message: string, options?: { cause?: unknown }) {
+		super(message);
+		this.name = "FetchCorrectOptionByQuestionIdError";
+		if (options?.cause) this.cause = options.cause;
+		Error.captureStackTrace(this, this.constructor);
+	}
+}

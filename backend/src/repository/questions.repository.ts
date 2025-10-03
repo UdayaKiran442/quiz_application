@@ -4,7 +4,7 @@
  */
 
 import { eq } from "drizzle-orm";
-import { AddQuestionsToQuizInDBError, GetQuestionByQuizIdFromDBError } from "../exceptions/questions.exceptions";
+import { AddQuestionsToQuizInDBError, FetchCorrectOptionByQuestionIdError, GetQuestionByQuizIdFromDBError } from "../exceptions/questions.exceptions";
 import { IAddQuestionsToQuizSchema } from "../routes/v1/questions.route";
 import { generateNanoId } from "../utils/nanoId.utils";
 import db from "./db";
@@ -39,5 +39,16 @@ export async function getQuestionsByQuizIdFromDB(quizId: string){
         }).from(questions).where(eq(questions.quizId, quizId)).leftJoin(quiz, eq(questions.quizId, quiz.quizId));
     } catch (error) {
         throw new GetQuestionByQuizIdFromDBError("Failed to get quiz by id from DB", { cause: (error as Error).message });
+    }
+}
+
+export async function fetchCorrectOptionByQuestionId(questionId: string){
+    try {
+        const result = await db.select({
+            correctOption: questions.correctOption,
+        }).from(questions).where(eq(questions.questionId, questionId));
+        return result[0]
+    } catch (error) {
+        throw new FetchCorrectOptionByQuestionIdError("Failed to get correct option by question id from DB", { cause: (error as Error).message });
     }
 }
