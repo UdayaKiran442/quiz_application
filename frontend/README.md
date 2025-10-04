@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 1. To run frontend project
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Clone github repository
+```sh
+git clone https://github.com/UdayaKiran442/quiz_application
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Install dependencies
+```sh
+cd quiz_application
+cd frontend
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+bun install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Run server
 
-## Learn More
+### For development environment
+```sh
+bun run dev
+```
+Server will start running in port 3000
 
-To learn more about Next.js, take a look at the following resources:
+# 2. Folder Structure
+src/
+├── actions/
+├── app/
+    ├── layout.tsx
+    ├── page.tsx
+    ├── create-quiz/
+    ├── quiz/
+    ├── reports/
+├── components/
+├── lib/
+├── type/
+└── README.md
+└── package.json
+└── tsconfig.json
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 2.1 Actions
+- This folder contains server actions and all api calls required to be done by client to server.
+- API calls defined in actions and called in a server component will not be viisble to user in network tab.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 2.2 App
+- This is the entry point of the app.
+- Default route '/' will be redirected to page.tsx in app folder.
+- Every folder in app defines a route.
+- For example folder create-quiz is a route, all requests with path name /create-quiz will be redirected to this folder.
+- Learn more about **App Routing** in **NextJS 15** https://nextjs.org/docs/app/getting-started/layouts-and-pages .
 
-## Deploy on Vercel
+## 2.3 Components
+- All UI client components will be in this folder.
+- These are rendered to client.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 2.4 lib
+- Utility functions which can be re-used will be present here.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 2.5 types
+- Types of various functions input and output will be defined here as interface.
+- Example 
+```sh
+export interface IGreetResponse{
+    reply: string
+}
+
+export interface IGreetPayload{
+    message: string
+}
+function greetAPI(payload: IGreetPayload): Promise<IGreetResponse>{}
+```
+
+## 2.6 README.md
+- All documentation related to code, folder structure, other details will be present here. 

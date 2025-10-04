@@ -1,3 +1,10 @@
+/**
+ * @description Controller for handling attempts-related operations.
+ * @description It interacts with the attempts repository and manages exceptions.
+ * 
+ * @author Udaya Kiran Gonuguntla
+ */
+
 import { AddAttemptError } from "../exceptions/attempts.exceptions";
 import { addAttemptToDB } from "../repository/attempts.repository";
 import { IAddAttemptSchema } from "../routes/v1/attempts.route";

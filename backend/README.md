@@ -7,6 +7,7 @@ git clone https://github.com/UdayaKiran442/quiz_application
 
 ## Install dependencies
 ```sh
+cd quiz_application
 cd backend
 ```
 
@@ -25,6 +26,8 @@ bun run dev
 ```sh
 bun run prod
 ```
+
+Server will start running in port 8080
 
 -------------------------------------
 

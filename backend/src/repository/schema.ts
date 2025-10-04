@@ -44,7 +44,7 @@ export const submissions = pgTable("submissions", {
     updatedAt: timestamp("updated_at").notNull(),
 }, (submissions) => [
     index("submissions_quiz_id_index").on(submissions.quizId),
-    primaryKey({ columns: [submissions.questionId, submissions.attemptId] }),
+    primaryKey({ columns: [submissions.questionId, submissions.attemptId] }), // composite primary key to find unique values by questionId and attemptId
 ])
 
 export const reports = pgTable("reports", {

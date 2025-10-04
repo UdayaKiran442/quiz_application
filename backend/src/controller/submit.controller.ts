@@ -1,3 +1,10 @@
+/**
+ * @description Controller for handling submit question and submit quiz operations.
+ * @description It interacts with the submit repository, quiz repository, and reports repository, and manages exceptions.
+ * 
+ * @author Udaya Kiran Gonuguntla
+ */
+
 import { GetQuizByIdFromDBError } from "../exceptions/quiz.exceptions";
 import { AddReportToDBError } from "../exceptions/reports.exceptions";
 import { FetchSubmissionsByAttemptIdFromDBError, SubmitQuestionError, SubmitQuestionInDBError, SubmitQuizError } from "../exceptions/submit.exceptions";
