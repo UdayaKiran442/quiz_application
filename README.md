@@ -17,3 +17,7 @@
 - Easy to extend (add auth later, partial scoring, multiple question types).
 
 ## 2. Technology Stack
+
+### Backend
+- Runtime Environment: Bun - chosen for its speed, light weight runtime.
+- Routing: 
