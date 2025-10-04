@@ -13,8 +13,8 @@ export default function QuizReport({ report }: IQuizReportProps) {
         <div className="max-w-4xl mx-auto p-6 bg-black text-white rounded-lg shadow-lg shadow-red-900/20">
             {/* Header */}
             <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-white mb-2">Quiz Report</h1>
-                <p className="text-gray-300">Completed on {new Date(report.createdAt).toLocaleDateString('en-US', { 
+                <h1 className="text-3xl font-bold text-red-500 mb-2">Quiz Report</h1>
+                <p className="text-red-300">Completed on {new Date(report.createdAt).toLocaleDateString('en-US', { 
                     year: 'numeric', 
                     month: 'long', 
                     day: 'numeric' 
@@ -40,10 +40,10 @@ export default function QuizReport({ report }: IQuizReportProps) {
             {/* Progress Bar */}
             <div className="mb-8">
                 <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium text-gray-700">Your Score</span>
-                    <span className="text-sm font-medium text-gray-700">{scorePercentage}%</span>
+                    <span className="text-sm font-medium text-red-300">Your Score</span>
+                    <span className="text-sm font-medium text-red-300">{scorePercentage}%</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div className="w-full bg-red-200 rounded-full h-2.5">
                     <div 
                         className={`h-2.5 rounded-full ${scorePercentage >= 70 ? 'bg-green-500' : scorePercentage >= 40 ? 'bg-yellow-500' : 'bg-red-500'}`}
                         style={{ width: `${scorePercentage}%` }}
@@ -52,8 +52,8 @@ export default function QuizReport({ report }: IQuizReportProps) {
             </div>
             
             {/* Questions Breakdown */}
-            <div className="space-y-6 text-white">
-                <h2 className="text-xl font-semibold text-gray-800 mb-4">Question Breakdown</h2>
+            <div className="space-y-6 text-red-500">
+                <h2 className="text-xl font-semibold text-red-500 mb-4">Question Breakdown</h2>
                 
                 {report.submissions.map((submission, index) => (
                     <div key={submission.questionId} className="border border-gray-800 bg-gray-900 rounded-lg p-4 hover:shadow-md hover:shadow-red-500/20 transition-all">
