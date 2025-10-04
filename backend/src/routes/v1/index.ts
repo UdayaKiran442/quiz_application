@@ -8,6 +8,7 @@ import quizRouter from "./quiz.route";
 import questionsRouter from "./questions.route";
 import submitRoute from "./submit.route";
 import attemptsRouter from "./attempts.route";
+import reportsRoute from "./reports.route";
 
 const v1Router = new Hono();
 
@@ -15,5 +16,6 @@ v1Router.route('/quiz', quizRouter);
 v1Router.route('/questions', questionsRouter);
 v1Router.route('/submit', submitRoute);
 v1Router.route('/attempts', attemptsRouter);
+v1Router.route('/reports', reportsRoute);
 
 export default v1Router;

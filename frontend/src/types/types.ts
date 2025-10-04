@@ -87,3 +87,31 @@ export interface ISubmitQuizResponse {
     reportId: string,
     error?: string
 }
+
+export interface IFetchReportByIDResponse {
+    success: boolean,
+    message: string,
+    report: IReport,
+    error?: string
+}
+
+export interface IReport {
+    reportId: string,
+    quizId: string,
+    attemptId: string,
+    score: number,
+    attemptedQuestions: number,
+    unAttemptedQuestions: number,
+    createdAt: Date,
+    submissions: ISubmissions[]
+}
+
+export interface ISubmissions {
+    quizId: string,
+    questionId: string,
+    option: string,
+    isCorrect: string,
+    created_at: Date,
+    updated_at: Date,
+    attemptId: string
+}
