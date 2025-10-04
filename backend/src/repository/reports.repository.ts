@@ -1,5 +1,5 @@
 import { eq, sql } from "drizzle-orm";
-import { AddReportToDBError } from "../exceptions/reports.exceptions";
+import { AddReportToDBError, FetchReportFromDBError } from "../exceptions/reports.exceptions";
 import { generateNanoId } from "../utils/nanoId.utils";
 import db from "./db";
 import { reports, submissions } from "./schema";
@@ -43,6 +43,6 @@ export async function fetchReportFromDB(reportId: string){
         .groupBy(reports.reportId);
         return report[0];
     } catch (error) {
-        
+        throw new FetchReportFromDBError("Failed to fetch report from DB", { cause: (error as Error).message });
     }
 }

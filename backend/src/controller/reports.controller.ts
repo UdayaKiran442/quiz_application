@@ -5,6 +5,7 @@
  * @author Udaya Kiran Gonuguntla
  */
 
+import { FetchReportError, FetchReportFromDBError } from "../exceptions/reports.exceptions";
 import { fetchReportFromDB } from "../repository/reports.repository";
 import { IFetchReport } from "../routes/v1/reports.route";
 
@@ -12,6 +13,9 @@ export async function fetchReport(payload: IFetchReport){
     try {
         return await fetchReportFromDB(payload.reportId);
     } catch (error) {
-        
+        if(error instanceof FetchReportFromDBError){
+            throw error;
+        }
+        throw new FetchReportError("Failed to fetch report", { cause: (error as Error).message });
     }
 }
