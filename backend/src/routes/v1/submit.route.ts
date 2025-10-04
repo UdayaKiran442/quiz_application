@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import z from "zod";
 import { fetchCorrectOptionByQuestionId } from "../../repository/questions.repository";
-import { submitQuestion } from "../../controller/submit.controller";
-import { SubmitQuestionError, SubmitQuestionInDBError } from "../../exceptions/submit.exceptions";
+import { submitQuestion, submitQuiz } from "../../controller/submit.controller";
+import { FetchSubmissionsByAttemptIdFromDBError, SubmitQuestionError, SubmitQuestionInDBError, SubmitQuizError } from "../../exceptions/submit.exceptions";
 import { FetchCorrectOptionByQuestionIdError } from "../../exceptions/questions.exceptions";
+import { GetQuizByIdFromDBError } from "../../exceptions/quiz.exceptions";
+import { AddReportToDBError } from "../../exceptions/reports.exceptions";
 
 const submitRoute = new Hono();
 
@@ -51,9 +53,22 @@ export type ISubmitQuizSchema = z.infer<typeof SubmitQuizSchema>
 
 submitRoute.post('/quiz', async (c) => {
     try {
-        
+        const validation = SubmitQuizSchema.safeParse(await c.req.json());
+        if(!validation.success){
+            throw validation.error;
+        }
+        const reportId = await submitQuiz(validation.data);
+        return c.json({ success: true, message: "Quiz submitted successfully", reportId }, 200);
     } catch (error) {
-        
+        if(error instanceof z.ZodError) {
+            const errMessage = JSON.parse(error.message);
+            return c.json({ success: false, error: errMessage[0], message: errMessage[0].message }, 400);
+        }
+        if (error instanceof AddReportToDBError || error instanceof FetchSubmissionsByAttemptIdFromDBError || error instanceof GetQuizByIdFromDBError || error instanceof SubmitQuizError) {
+            throw error;
+        }
+
+        return c.json({ message: "Failed to submit quiz", error: (error as Error).message }, 500);
     }
 })
 

@@ -46,3 +46,14 @@ export const submissions = pgTable("submissions", {
     index("submissions_quiz_id_index").on(submissions.quizId),
     primaryKey({ columns: [submissions.questionId, submissions.attemptId] }),
 ])
+
+export const reports = pgTable("reports", {
+    reportId: varchar("report_id").primaryKey(),
+    quizId: varchar("quiz_id").notNull(),
+    attemptId: varchar("attempt_id").notNull(),
+    score: integer("score").notNull(),
+    attemptedQuestions: integer("attempted_questions").notNull(),
+    unAttemptedQuestions: integer("un_attempted_questions").notNull(),
+    createdAt: timestamp("created_at").notNull(),
+    updatedAt: timestamp("updated_at").notNull(),
+})

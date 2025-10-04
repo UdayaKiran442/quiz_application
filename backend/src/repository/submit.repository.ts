@@ -1,4 +1,5 @@
-import { SubmitQuestionInDBError } from "../exceptions/submit.exceptions";
+import { eq } from "drizzle-orm";
+import { FetchSubmissionsByAttemptIdFromDBError, SubmitQuestionInDBError } from "../exceptions/submit.exceptions";
 import { ISubmitQuestionSchema } from "../routes/v1/submit.route";
 import { generateNanoId } from "../utils/nanoId.utils";
 import db from "./db";
@@ -26,5 +27,13 @@ export async function submitQuestionInDB(payload: ISubmitQuestionSchema) {
         return;
     } catch (error) {
         throw new SubmitQuestionInDBError("Failed to submit question in DB", { cause: (error as Error).message });
+    }
+}
+
+export async function fetchSubmissionsByAttemptIdFromDB(attemptId: string) {
+    try {
+        return await db.select().from(submissions).where(eq(submissions.attemptId, attemptId));
+    } catch (error) {
+        throw new FetchSubmissionsByAttemptIdFromDBError("Failed to fetch submissions by attemptId from DB", { cause: (error as Error).message });
     }
 }

@@ -3,7 +3,8 @@
  * @description database operations for quiz table
  */
 
-import { CreateQuizInDBError, GetQuizzesFromDBError } from "../exceptions/quiz.exceptions";
+import { eq } from "drizzle-orm";
+import { CreateQuizInDBError, GetQuizByIdFromDBError, GetQuizzesFromDBError } from "../exceptions/quiz.exceptions";
 import { ICreateQuizSchema } from "../routes/v1/quiz.route";
 import { generateNanoId } from "../utils/nanoId.utils";
 import db from "./db";
@@ -32,5 +33,13 @@ export async function getQuizzesFromDB(){
         return await db.select().from(quiz);
     } catch (error) {
         throw new GetQuizzesFromDBError("Failed to get quizzes from DB", { cause: (error as Error).message });
+    }
+}
+
+export async function getQuizByIdFromDB(quizId: string){
+    try {
+        return await db.select().from(quiz).where(eq(quiz.quizId, quizId))
+    } catch (error) {
+        throw new GetQuizByIdFromDBError("Failed to get quiz by id from DB", { cause: (error as Error).message });
     }
 }

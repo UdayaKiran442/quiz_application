@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Button from "./ui/Button"
-import { submitQuestionAPI } from "@/actions/submit.actions"
-import { toast } from "react-toastify"
+import { submitQuestionAPI, submitQuizAPI } from "@/actions/submit.actions"
 
 interface IQuestionsPageProps {
     questions: {
@@ -21,6 +21,7 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const currentQuestion = questions[currentIndex]
+    const router = useRouter();
 
     const handleAnswerChange = (questionId: string, optionKey: string) => {
         setAnswers((prev) => ({
@@ -33,9 +34,9 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
         setCurrentIndex(currentIndex + 1);
         try {
             const submitQuestionRes = await submitQuestion(questionId, quizId);
-            if (submitQuestionRes && !submitQuestionRes.success) {
-                toast.error("Try submitting question again");
-            }
+            // if (submitQuestionRes && !submitQuestionRes.success) {
+            //     toast.error("Try submitting question again");
+            // }
         } catch (error) {
 
         }
@@ -57,8 +58,14 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
     async function submitQuiz(questionId: string, quizId: string) {
         try {
             const submitQuestionRes = await submitQuestion(questionId, quizId);
-            if (submitQuestionRes && !submitQuestionRes.success) {
-                toast.error("Try submitting question again");
+            if (submitQuestionRes && submitQuestionRes.success) {
+                const submitQuizRes = await submitQuizAPI({
+                    attemptId,
+                    quizId
+                })
+                if (submitQuizRes.success) {
+                    router.push(`/reports/${submitQuizRes.reportId}`)
+                }
             }
         } catch (error) {
 

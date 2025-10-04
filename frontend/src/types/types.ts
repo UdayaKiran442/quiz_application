@@ -75,3 +75,15 @@ export interface ISubmitQuestionResponse {
     success: boolean,
     message: string,
 }
+
+export interface ISubmitQuizPayload {
+    quizId: string,
+    attemptId: string
+}
+
+export interface ISubmitQuizResponse {
+    success: boolean,
+    message: string,
+    reportId: string,
+    error?: string
+}

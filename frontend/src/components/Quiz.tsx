@@ -10,7 +10,7 @@ import { addAttemptAPI } from "@/actions/attempts.actions";
 import { useState } from "react";
 
 interface IQuizzesPage {
-  quizzes: IQuiz[]
+  quizzes?: IQuiz[]
 }
 
 export default function QuizzesPage({ quizzes }: IQuizzesPage) {
@@ -39,7 +39,7 @@ export default function QuizzesPage({ quizzes }: IQuizzesPage) {
           <Button>+ Create New Quiz</Button>
         </Link>
       </div>
-      {quizzes.map((quiz) => (
+      {quizzes?.map((quiz) => (
         <QuizCard loading={loading} onClick={() => createAttempt(quiz.quizId)} quiz={quiz} key={quiz.quizId} />
       ))}
     </div>
