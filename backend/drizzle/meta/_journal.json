@@ -43,6 +43,13 @@
       "when": 1759478301848,
       "tag": "0005_narrow_lady_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1759555263965,
+      "tag": "0006_brainy_owl",
+      "breakpoints": true
     }
   ]
 }

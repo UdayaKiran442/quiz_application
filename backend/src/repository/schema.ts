@@ -3,7 +3,7 @@
  * @description drizzle orm schemas for quiz and questions tables
  */
 
-import { integer, pgTable, timestamp, varchar, json, index, boolean } from "drizzle-orm/pg-core";
+import { integer, pgTable, timestamp, varchar, json, index, boolean, primaryKey } from "drizzle-orm/pg-core";
 
 export const quiz = pgTable("quiz", {
     quizId: varchar("quiz_id").primaryKey(),
@@ -35,7 +35,6 @@ export const attempts = pgTable("attempts", {
 })
 
 export const submissions = pgTable("submissions", {
-    submissionId: varchar("submissionId").primaryKey(),
     quizId: varchar("quizId").notNull(),
     questionId: varchar("questionId").notNull(),
     attemptId: varchar("attemptId").notNull(),
@@ -43,6 +42,7 @@ export const submissions = pgTable("submissions", {
     isCorrect: boolean("isCorrect").notNull(),
     createdAt: timestamp("created_at").notNull(),
     updatedAt: timestamp("updated_at").notNull(),
-}, (submissions) => ({
-    quizIdIndex: index("submissions_quiz_id_index").on(submissions.quizId),
-}))
+}, (submissions) => [
+    index("submissions_quiz_id_index").on(submissions.quizId),
+    primaryKey({ columns: [submissions.questionId, submissions.attemptId] }),
+])

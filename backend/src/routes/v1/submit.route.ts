@@ -29,7 +29,7 @@ submitRoute.post('/question', async(c) => {
             isCorrect: correctOption === validation.data.option
         }
         await submitQuestion(payload);
-        return c.json({ message: "Question submitted successfully" }, 200);
+        return c.json({success: true, message: "Question submitted successfully" }, 200);
    } catch (error) {
         if(error instanceof z.ZodError) {
             const errMessage = JSON.parse(error.message);
