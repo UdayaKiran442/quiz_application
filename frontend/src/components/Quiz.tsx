@@ -23,9 +23,9 @@ export default function QuizzesPage({ quizzes }: IQuizzesPage) {
       setLoading(true);
       const newAttempt = await addAttemptAPI(quizId);
       if (newAttempt.success) {
-        setLoading(false);
         // redirect to quiz exam page
         redirect.push(`/quiz/${quizId}/${newAttempt.attemptId}`);
+        setLoading(false);
       }
     } catch (error) {
 

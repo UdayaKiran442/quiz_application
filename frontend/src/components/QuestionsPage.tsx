@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import Button from "./ui/Button"
+import { submitQuestionAPI } from "@/actions/submit.actions"
+import { toast } from "react-toastify"
 
 interface IQuestionsPageProps {
     questions: {
@@ -12,11 +14,57 @@ interface IQuestionsPageProps {
         options: Record<string, string>
     }[],
     length: number,
+    attemptId: string,
 }
 
-export default function QuestionsPage({ questions, length }: IQuestionsPageProps) {
+export default function QuestionsPage({ questions, length, attemptId }: IQuestionsPageProps) {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
+    const [answers, setAnswers] = useState<Record<string, string>>({});
     const currentQuestion = questions[currentIndex]
+
+    const handleAnswerChange = (questionId: string, optionKey: string) => {
+        setAnswers((prev) => ({
+            ...prev,
+            [questionId]: optionKey,
+        }));
+    };
+
+    async function onClickNext(questionId: string, quizId: string) {
+        setCurrentIndex(currentIndex + 1);
+        try {
+            const submitQuestionRes = await submitQuestion(questionId, quizId);
+            if (submitQuestionRes && !submitQuestionRes.success) {
+                toast.error("Try submitting question again");
+            }
+        } catch (error) {
+
+        }
+    }
+
+    async function submitQuestion(questionId: string, quizId: string) {
+        try {
+            return await submitQuestionAPI({
+                attemptId,
+                option: answers[questionId],
+                questionId,
+                quizId
+            })
+        } catch (error) {
+
+        }
+    }
+
+    async function submitQuiz(questionId: string, quizId: string) {
+        try {
+            const submitQuestionRes = await submitQuestion(questionId, quizId);
+            if (submitQuestionRes && !submitQuestionRes.success) {
+                toast.error("Try submitting question again");
+            }
+        } catch (error) {
+
+        }
+    }
+
     return (
         <div className="max-w-2xl mx-auto p-6 ">
             <div>
@@ -38,6 +86,9 @@ export default function QuestionsPage({ questions, length }: IQuestionsPageProps
                             <input
                                 type="radio"
                                 name={currentQuestion.questionId}
+                                // write on checked here
+                                onChange={() => handleAnswerChange(currentQuestion.questionId, key)}
+                                checked={answers[currentQuestion.questionId] === key}
                             />
                             <span>
                                 <strong>{key}.</strong> {value}
@@ -52,9 +103,9 @@ export default function QuestionsPage({ questions, length }: IQuestionsPageProps
                     <Button onClick={() => setCurrentIndex(currentIndex - 1)}>Previous</Button>
                 )}
                 {currentIndex + 1 === length ? (
-                    <Button>Submit</Button>
+                    <Button onClick={() => submitQuiz(currentQuestion.questionId, currentQuestion.quizId)}>Submit</Button>
                 ) : (
-                    <Button onClick={() => setCurrentIndex(currentIndex + 1)}>Next</Button>
+                    <Button onClick={() => onClickNext(currentQuestion.questionId, currentQuestion.quizId)}>Next</Button>
                 )}
             </div>
         </div>

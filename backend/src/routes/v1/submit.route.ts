@@ -42,4 +42,19 @@ submitRoute.post('/question', async(c) => {
     }
 })
 
+const SubmitQuizSchema = z.object({
+    quizId: z.string(),
+    attemptId: z.string(),
+})
+
+export type ISubmitQuizSchema = z.infer<typeof SubmitQuizSchema>
+
+submitRoute.post('/quiz', async (c) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+})
+
 export default submitRoute;

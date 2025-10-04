@@ -22,8 +22,8 @@ export default function QuizCard({ quiz, loading, onClick }: IQuizCard) {
                         Duration: {quiz.duration} min
                     </p>
                 </div>
-                <Button disabled={loading}  onClick={onClick} className="flex items-center justify-center gap-1">
-                    Take Quiz
+                <Button disabled={loading} onClick={onClick} className="flex items-center justify-center gap-1">
+                    {loading ? "Loading..." : "Take Quiz"}
                     <ArrowRight />
                 </Button>
             </div>

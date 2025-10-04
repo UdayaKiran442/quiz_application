@@ -63,3 +63,15 @@ export interface IAddAttemptResponse {
     message: string,
     error?: string
 }
+
+export interface ISubmitQuestionPayload {
+    quizId: string,
+    attemptId: string,
+    questionId: string,
+    option: string
+}
+
+export interface ISubmitQuestionResponse {
+    success: boolean,
+    message: string,
+}

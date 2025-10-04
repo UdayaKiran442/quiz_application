@@ -13,7 +13,7 @@ export default async function Home({ params }: { params: Promise<{ quizId: strin
     }
     return (
         <>
-            <QuestionsPage questions={questions.questions} length={questions.questions.length} />
+            <QuestionsPage attemptId={attemptId} questions={questions.questions} length={questions.questions.length} />
         </>
     );
 }
