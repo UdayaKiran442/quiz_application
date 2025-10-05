@@ -1,5 +1,8 @@
 # Quiz Application - System Design Document
 
+**Author** Udaya Kiran Gonuguntla
+**Date** 5 Oct 2025
+
 - This document describes production ready design for quiz application.
 - It covers schema, API's, run time flow, scaling, security etc.
 
