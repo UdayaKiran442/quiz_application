@@ -6,6 +6,7 @@ import { FetchSubmissionsByAttemptIdFromDBError, SubmitQuestionError, SubmitQues
 import { FetchCorrectOptionByQuestionIdError } from "../../exceptions/questions.exceptions";
 import { GetQuizByIdFromDBError } from "../../exceptions/quiz.exceptions";
 import { AddReportToDBError } from "../../exceptions/reports.exceptions";
+import { UpdateAttemptStatusInDBError } from "../../exceptions/attempts.exceptions";
 
 const submitRoute = new Hono();
 
@@ -64,7 +65,7 @@ submitRoute.post('/quiz', async (c) => {
             const errMessage = JSON.parse(error.message);
             return c.json({ success: false, error: errMessage[0], message: errMessage[0].message }, 400);
         }
-        if (error instanceof AddReportToDBError || error instanceof FetchSubmissionsByAttemptIdFromDBError || error instanceof GetQuizByIdFromDBError || error instanceof SubmitQuizError) {
+        if (error instanceof AddReportToDBError || error instanceof UpdateAttemptStatusInDBError || error instanceof FetchSubmissionsByAttemptIdFromDBError || error instanceof GetQuizByIdFromDBError || error instanceof SubmitQuizError) {
             throw error;
         }
 

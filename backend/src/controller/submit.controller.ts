@@ -8,10 +8,12 @@
 import { GetQuizByIdFromDBError } from "../exceptions/quiz.exceptions";
 import { AddReportToDBError } from "../exceptions/reports.exceptions";
 import { FetchSubmissionsByAttemptIdFromDBError, SubmitQuestionError, SubmitQuestionInDBError, SubmitQuizError } from "../exceptions/submit.exceptions";
+import { updateAttemptStatusInDB } from "../repository/attempts.repository";
 import { getQuizByIdFromDB } from "../repository/quiz.repository";
 import { addReportInDB } from "../repository/reports.repository";
 import { fetchSubmissionsByAttemptIdFromDB, submitQuestionInDB } from "../repository/submit.repository";
 import { ISubmitQuestionSchema, ISubmitQuizSchema } from "../routes/v1/submit.route";
+import { UpdateAttemptStatusInDBError } from '../exceptions/attempts.exceptions';
 
 export async function submitQuestion(payload: ISubmitQuestionSchema){
     try {
@@ -37,6 +39,8 @@ export async function submitQuiz(payload: ISubmitQuizSchema){
             const attemptedQuestions = submissions.length;
             // calculate unattempted questions
             const unAttemptedQuestions = quiz[0].noOfQuestions - attemptedQuestions;
+            // update attempt status to completed
+            await updateAttemptStatusInDB(payload.attemptId);
             // store report in db
             return await addReportInDB({
                 quizId: payload.quizId,
@@ -47,7 +51,7 @@ export async function submitQuiz(payload: ISubmitQuizSchema){
             })
         }
     } catch (error) {
-        if (error instanceof AddReportToDBError || error instanceof FetchSubmissionsByAttemptIdFromDBError || error instanceof GetQuizByIdFromDBError) {
+        if (error instanceof AddReportToDBError || error instanceof FetchSubmissionsByAttemptIdFromDBError || error instanceof GetQuizByIdFromDBError || error instanceof UpdateAttemptStatusInDBError) {
             throw error;
         }
         throw new SubmitQuizError("Failed to submit quiz", { cause: (error as Error).message });
