@@ -20,6 +20,7 @@ interface IQuestionsPageProps {
 export default function QuestionsPage({ questions, length, attemptId }: IQuestionsPageProps) {
     const [currentIndex, setCurrentIndex] = useState<number>(0)
     const [answers, setAnswers] = useState<Record<string, string>>({});
+    const [loading, setLoading] = useState<boolean>(false);
     const currentQuestion = questions[currentIndex]
     const router = useRouter();
 
@@ -33,10 +34,7 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
     async function onClickNext(questionId: string, quizId: string) {
         setCurrentIndex(currentIndex + 1);
         try {
-            const submitQuestionRes = await submitQuestion(questionId, quizId);
-            // if (submitQuestionRes && !submitQuestionRes.success) {
-            //     toast.error("Try submitting question again");
-            // }
+            await submitQuestion(questionId, quizId);
         } catch (error) {
 
         }
@@ -57,6 +55,7 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
 
     async function submitQuiz(questionId: string, quizId: string) {
         try {
+            setLoading(true)
             const submitQuestionRes = await submitQuestion(questionId, quizId);
             if (submitQuestionRes && submitQuestionRes.success) {
                 const submitQuizRes = await submitQuizAPI({
@@ -67,8 +66,9 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
                     router.push(`/reports/${submitQuizRes.reportId}`)
                 }
             }
+            setLoading(false);
         } catch (error) {
-
+            setLoading(false);
         }
     }
 
@@ -110,7 +110,7 @@ export default function QuestionsPage({ questions, length, attemptId }: IQuestio
                     <Button onClick={() => setCurrentIndex(currentIndex - 1)}>Previous</Button>
                 )}
                 {currentIndex + 1 === length ? (
-                    <Button onClick={() => submitQuiz(currentQuestion.questionId, currentQuestion.quizId)}>Submit</Button>
+                    <Button disabled={loading} onClick={() => submitQuiz(currentQuestion.questionId, currentQuestion.quizId)}>{loading ? "Submitting..." : "Submit"}</Button>
                 ) : (
                     <Button onClick={() => onClickNext(currentQuestion.questionId, currentQuestion.quizId)}>Next</Button>
                 )}

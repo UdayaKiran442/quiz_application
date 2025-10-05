@@ -21,6 +21,7 @@ export default function QuizCard({ quiz, loading, onClick }: IQuizCard) {
                         <Clock size={14} className="mr-1" />
                         Duration: {quiz.duration} min
                     </p>
+                    <p className="text-gray-400 mt-1">Created At: {new Date(quiz.createdAt).toDateString()}</p>
                 </div>
                 <Button disabled={loading} onClick={onClick} className="flex items-center justify-center gap-1">
                     {loading ? "Loading..." : "Take Quiz"}
