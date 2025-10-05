@@ -252,6 +252,31 @@ Response:
 {
   success: boolean,
   message: string,
+}
+```
+
+** Submit Quiz**
+
+API End Point: /submit/quiz
+
+Method: POST
+
+Description: API used to submit quiz, report of the quiz inlcuding score, no of correct etc will be stored in reports table.
+
+Payload: 
+```js
+{
+  quizId: string,
+  attemptId: string,
+}
+```
+
+Response:
+```js
+{
+  success: boolean,
+  message: string,
   reportId: string
 }
 ```
+
