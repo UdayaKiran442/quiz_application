@@ -83,3 +83,64 @@ un_attempted_questions: integer,
 created_at: Date,
 updated_at: Date
 ```
+
+## 4. User Flow
+- User can create quiz by selecting Create quiz button, filling all the details about questions, quiz, etc.
+- Users can take a quiz. By selecting "Take Quiz" users will be redirected to Quiz Page.
+- After submitting quiz users will see reports page where there will be detailed analysis about quiz.
+
+## 5. API Design
+Base URL: "http://localhost:8080/v1"
+
+### 5.1 Quiz Route
+
+**Create Quiz**
+
+API End Point: /quiz/create
+
+Method: POST
+
+Description: API to create quiz. Created quiz will be stored in database.
+
+Payload: 
+```js
+{
+  title: string,
+  duration: number, // duration in minutes
+  noOfQuestions: number
+}
+```
+
+Response: 
+```js
+{
+  success: boolean,
+  message: string,
+  quizId: string
+}
+```
+
+**Fetch All Quizzes**
+
+API End Point: /quiz
+
+Method: GET
+
+Description: API to fetch all quizzes from database.
+
+Response:
+```js
+{
+  success: boolean,
+  quiz: {
+    quizId: string,
+    title: string,
+    noOfQuestions: number,
+    duration: number,
+    createdAt: Date,
+    updatedAt: Date
+  }[]
+}
+```
+
+
