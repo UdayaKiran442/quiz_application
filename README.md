@@ -279,4 +279,47 @@ Response:
   reportId: string
 }
 ```
+### 5.5 Reports Router
 
+**Fetch Report**
+
+API End Point: /report/fetch
+
+Method: POST
+
+Description: This API will be called to fetch the report for the quiz.
+
+Payload: 
+```js
+{
+  reportId: string,
+}
+```
+
+Response:
+```js
+{
+  success: boolean,
+  message: string,
+  report: {
+    reportId: string,
+    quizId: string,
+    attemptId: string,
+    score: number,
+    attemptedQuestions: number,
+    unAttemptedQuestions: number,
+    createdAt: Date,
+    submissions: ISubmissions[]
+  }
+}
+
+interface ISubmissions {
+    quizId: string,
+    questionId: string,
+    option: string,
+    isCorrect: string,
+    created_at: Date,
+    updated_at: Date,
+    attemptId: string
+}
+```
