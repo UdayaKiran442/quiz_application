@@ -84,10 +84,11 @@ created_at: Date,
 updated_at: Date
 ```
 
-## 4. User Flow
-- User can create quiz by selecting Create quiz button, filling all the details about questions, quiz, etc.
-- Users can take a quiz. By selecting "Take Quiz" users will be redirected to Quiz Page.
-- After submitting quiz users will see reports page where there will be detailed analysis about quiz.
+## 4. Technical Flow
+- Frontend Create Quiz -> Backend API will be called, payload will be validated in both frontend and backend and new quiz will be created and added in database.
+- Frontend Take Quiz -> Backend API will be called for creating a new attempt in attempts table, after which first question will be rendered for the users.
+- Frontend Next Question -> When user selects next question after selecting an answer, user will be navigated to next question and in background submission will be added in submissions table after validating user chosen option if it is correct or not.
+- Frontend Submit Quiz -> After attempting all questions users can submit quiz, score will be calculated and user will be navigated to reports page where users can see detailed report of the quiz.
 
 ## 5. API Design
 Base URL: "http://localhost:8080/v1"
@@ -323,3 +324,9 @@ interface ISubmissions {
     attemptId: string
 }
 ```
+
+## 6. UX Considerations
+- Start quiz: create attempt first, then render first question and start timer using duration.
+- Save progress locally (for retries) and call submissions API in the background or on navigation.
+- On timer expired: auto-call submit; show “Submitting…” and show report on success.
+- Show review screen with: question text, chosen option, correct option, whether correct.
