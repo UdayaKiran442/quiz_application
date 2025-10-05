@@ -255,7 +255,7 @@ Response:
 }
 ```
 
-** Submit Quiz**
+**Submit Quiz**
 
 API End Point: /submit/quiz
 
