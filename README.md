@@ -143,4 +143,60 @@ Response:
 }
 ```
 
+### 5.2 Questions Route
+ 
+**Add Question to Quiz Schema**
 
+API End Point: /question/add
+
+Method: POST
+
+Description: API to add question to quiz.
+
+Payload:
+```js
+{
+  quizId: string,
+  questionText: string,
+  options: Record<string,string>,
+  correctOption: string
+}
+```
+
+Response
+```js
+{
+success: boolean,
+message: string
+}
+```
+
+**Fetch questions by quiz id**
+
+API End Point: /question/fetch
+
+Method: POST
+
+Description: API to fetch all questions for the quiz which are rendered in quiz page.
+
+Payload: 
+```js
+{
+  quizId: string
+}
+```
+
+Response:
+```js
+{
+  success: boolean,
+  questions: {
+    quizId: string,
+    title: string,
+    duration: string,
+    questionId: string,
+    questionText: string,
+    options: Record<string, string>,
+  }[]
+}
+```
