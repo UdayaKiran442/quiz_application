@@ -200,3 +200,58 @@ Response:
   }[]
 }
 ```
+
+### 5.3 Attempts Router
+
+**Add Attempt**
+
+API End Point: /attempts/add
+
+Method: POST
+
+Description: Add attempt when user starts the quiz, this attempt id which will be generated helps to uniquely identify submission which later can be used for scoring.
+
+Payload:
+```js
+{
+  quizId: string
+}
+```
+
+Response:
+```js
+{
+  success: boolean,
+  message: string,
+  attemptId: string
+}
+```
+
+### 5.4 Submit Router
+
+**Submit Question**
+
+API End Point: /submit/question
+
+Method: POST
+
+Description: API is used to add a submission in database when user answers a question.
+
+Payload: 
+```js
+{
+  quizId: string,
+  questionId: string,
+  attemptId: string,
+  option: string
+}
+```
+
+Response:
+```js
+{
+  success: boolean,
+  message: string,
+  reportId: string
+}
+```
