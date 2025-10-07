@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -7,16 +7,21 @@ import Button from "./ui/Button";
 import { IQuiz } from "@/types/types";
 import QuizCard from "./QuizCard";
 import { addAttemptAPI } from "@/actions/attempts.actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IQuizzesPage {
-  quizzes?: IQuiz[]
+  quizzes?: IQuiz[];
 }
 
 export default function QuizzesPage({ quizzes }: IQuizzesPage) {
   const [loading, setLoading] = useState(false);
 
   const redirect = useRouter();
+
+  // Prefetch create-quiz route to make first navigation instant
+  useEffect(() => {
+    redirect.prefetch?.("/create-quiz");
+  }, [redirect]);
 
   async function createAttempt(quizId: string) {
     try {
@@ -27,9 +32,7 @@ export default function QuizzesPage({ quizzes }: IQuizzesPage) {
         redirect.push(`/quiz/${quizId}/${newAttempt.attemptId}`);
         setLoading(false);
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   return (
@@ -40,8 +43,13 @@ export default function QuizzesPage({ quizzes }: IQuizzesPage) {
         </Link>
       </div>
       {quizzes?.map((quiz) => (
-        <QuizCard loading={loading} onClick={() => createAttempt(quiz.quizId)} quiz={quiz} key={quiz.quizId} />
+        <QuizCard
+          loading={loading}
+          onClick={() => createAttempt(quiz.quizId)}
+          quiz={quiz}
+          key={quiz.quizId}
+        />
       ))}
     </div>
   );
-};
+}
